@@ -1,0 +1,23 @@
+<nav class="navbar navbar-expand-lg text-light">
+	<div class="container-fluid">
+		<div class="mx-4">
+			<a class="navbar-brand" href="javascript:void(0)">
+				<img src="/assets/images/logo.png" alt="Logo" height="50" width="50" class="rounded" role="button" [routerLink]="['/']" />
+			</a>
+		</div>
+		<div class="d-flex flex-grow-1 align-items-center justify-content-between gap-2">
+			<div class="ms-auto">
+				<span>Hi,&nbsp;{{ loggedUser.username }}</span>
+				<img
+					[src]="serverPath + loggedUser.profile"
+					[alt]="loggedUser.username"
+					height="25"
+					width="25"
+					class="rounded-circle mx-2"
+					role="button"
+					[routerLink]="['', 'profile']"
+				/>
+			</div>
+		</div>
+	</div>
+</nav>

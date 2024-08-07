@@ -1,0 +1,76 @@
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-6">
+			<form (submit)="onSearch()">
+				<div class="d-flex">
+					<input
+						type="text"
+						pInputText
+						name="search"
+						[placeholder]="'Search ' + (user && user['roleId'] == 1 ? 'Referer' : 'Referent')"
+						[(ngModel)]="searchQuery"
+						class="flex-grow-1"
+					/>
+					<p-dropdown name="type" [options]="searchTypes" [(ngModel)]="selectedSearchType" optionLabel="name" [style]="{ width: '150px' }"></p-dropdown>
+					<button type="submit" pButton icon="pi pi-search"></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div>
+		<hr *ngIf="hasSearched" />
+		<h2 class="text-center" *ngIf="hasSearched">Results</h2>
+		<p-dataView [value]="searchResults">
+			<ng-template pTemplate="empty">
+				@if(searching) {
+				<div class="row">
+					@for(number of [1,2,3,4,5,6]; track $index) {
+					<div class="col-2">
+						<div class="p-2 shadow-sm border rounded d-flex flex-column align-items-center">
+							<p-skeleton size="8rem"></p-skeleton>
+							<p-skeleton width="6rem" styleClass="my-2"></p-skeleton>
+							<p-skeleton width="8rem" styleClass="my-2"></p-skeleton>
+							<p-skeleton width="4rem" styleClass="mt-2 mb-4"></p-skeleton>
+							<p-skeleton width="5rem" height="3rem" styleClass="my-2"></p-skeleton>
+						</div>
+					</div>
+					}
+				</div>
+				} @else {
+				<div class="text-center p-4">
+					<p *ngIf="hasSearched">No results found</p>
+					<p *ngIf="!hasSearched" class="d-flex flex-column gap-3 pt-5"><i class="pi pi-search" style="font-size: 5em"></i> Search for users</p>
+				</div>
+				}
+			</ng-template>
+			<ng-template pTemplate="list" let-listOfUsers>
+				<div class="row text-center">
+					<div *ngFor="let user of listOfUsers" class="col-2">
+						<div class="p-2 shadow-sm border rounded">
+							<div style="height: 100px">
+								<img class="mh-100 rounded" [src]="imagePath + user.profilePicture" role="button" (click)="show(user.userId)" />
+							</div>
+
+							<p class="fs-6 fw-bold text-decoration-underline" role="button" (click)="show(user.userId)">{{ user.name }}</p>
+							<!-- <p class="fs-6">{{ result.experience }}</p> -->
+							<p class="fs-6">
+								Experience: {{ user.experience.years }} year(s)
+								<br />
+								<small>({{ user.experience.level }})</small>
+							</p>
+							<p class="fs-6">{{ user.companyName }}</p>
+							<!-- <p class="fs-6">{{ result.status }}</p> -->
+							<!-- <p-tag *ngIf="result.status" [value]="result.status" [severity]="getStatusSeverity(result.status)"> </p-tag> -->
+							<div class="button-container">
+								<button pButton *ngIf="!user.status && userCategory" [loading]="isSendingRequest" (click)="sendRequest(user)">Send Request</button>
+								<button pButton *ngIf="user.status && user.status === 'PENDING'" [disabled]="true" icon="pi pi-clock" severity="warning">PENDING</button>
+								<button pButton *ngIf="user.status && user.status === 'ACCEPTED'" [disabled]="true" icon="pi pi-check" severity="success">ACCEPTED</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</ng-template>
+		</p-dataView>
+	</div>
+</div>

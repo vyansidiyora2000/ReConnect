@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Skill Domain Table -->
+    <changeSet id="14" author="Sigapriya">
+        <createTable tableName="SkillDomain">
+            <column name="domainId" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="domainName" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Skill Domain Foreign Key Constraints to Skills Table -->
+    <changeSet id="14.1" author="Sigapriya">
+        <addColumn tableName="Skills">
+            <column name="domainId" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="Skills"
+                                 baseColumnNames="domainId"
+                                 constraintName="fk_skills_domain_id"
+                                 referencedTableName="SkillDomain"
+                                 referencedColumnNames="domainId"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="14.2" author="sigapriya">
+        <dropColumn tableName="Skills" columnName="SkillDomain"/>
+    </changeSet>
+
+
+</databaseChangeLog>

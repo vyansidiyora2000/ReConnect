@@ -1,0 +1,116 @@
+<div class="container h-100">
+	<div class="row mh-100 h-100">
+		<div class="col-4 h-100">
+			<p-listbox
+				[filter]="true"
+				scrollHeight="100%"
+				[options]="listOfUsers"
+				optionLabel="name"
+				styleClass="h-100 d-flex flex-column"
+				[(ngModel)]="selectedUser"
+				emptyMessage="No Connections"
+				filterPlaceHolder="Search Users"
+				(onChange)="fetchMessages()"
+			>
+				<ng-template pTemplate="item" let-user>
+					<img [src]="imagePath + user.profile" [alt]="user.name" height="40" width="40" class="me-2 rounded" />
+					<span class="text-truncate">{{ user.name }}</span>
+					@if(user.newMessage){
+					<i class="pi p-text-secondary ms-auto" pBadge style="font-size: 1rem" severity="info"></i>
+					}
+				</ng-template>
+			</p-listbox>
+		</div>
+		<div class="col-8 messages-container overflow-hidden rounded h-100" #scrollMe>
+			@if(selectedUser) {
+			<div class="row">
+				<div class="col pt-0">
+					<div class="name-bar-wrapper shadow-sm border rounded p-2 d-flex align-items-center gap-3 justify-content-start">
+						<img
+							[src]="serverPath + selectedUser.profile"
+							[alt]="selectedUser.username"
+							height="25"
+							width="25"
+							role="button"
+							class="rounded"
+							(click)="show(selectedUser.userId)"
+						/><span class="fw-bold fs-4" role="button" (click)="show(selectedUser.userId)">{{ selectedUser.name }}</span>
+					</div>
+				</div>
+			</div>
+			<div class="row h-100 overflow-auto messages-row">
+				<div class="col messages-wrapper rounded">
+					@if(fetchingMessages) { @for (item of [1,2,3]; track $index) {
+					<div class="row m-4 me-0 justify-content-end sender">
+						<div class="d-flex flex-column w-auto">
+							<!-- <span class="fw-bold">{{ message.senderName }}</span> -->
+							<div class="d-flex align-items-end gap-2 flex-row-reverse">
+								<p-skeleton shape="circle" size="2rem"></p-skeleton>
+								<p-skeleton width="20rem" height="4rem"></p-skeleton>
+							</div>
+							<p-skeleton width="3rem" height="1rem" styleClass="mt-1"></p-skeleton>
+						</div>
+					</div>
+					<div class="row m-4 ms-0 justify-content-start receiver">
+						<div class="d-flex flex-column w-auto">
+							<!-- <span class="fw-bold">{{ message.senderName }}</span> -->
+							<div class="d-flex align-items-end gap-2">
+								<p-skeleton shape="circle" size="2rem"></p-skeleton>
+								<p-skeleton width="20rem" height="4rem"></p-skeleton>
+							</div>
+							<p-skeleton width="3rem" height="1rem" styleClass="text-end mt-1"></p-skeleton>
+						</div>
+					</div>
+					} } @else { @if(listOfMessages.length === 0) {
+					<div class="row w-100 h-100">
+						<div class="col h-100 text-center position-relative">
+							<span class="position-absolute top-50 start-50 translate-middle">No Messages</span>
+						</div>
+					</div>
+					} @for (message of listOfMessages; track $index) {
+					<div
+						class="row m-4"
+						[ngClass]="{
+							'me-0 justify-content-end sender': message.senderId === user.userId,
+							'ms-0 justify-content-start receiver': message.senderId === selectedUser.userId
+						}"
+					>
+						<div class="d-flex flex-column w-auto">
+							<!-- <span class="fw-bold">{{ message.senderName }}</span> -->
+							<div class="d-flex align-items-end gap-2" [ngClass]="{ 'flex-row-reverse': message.senderId === user.userId }">
+								<img
+									class="float-start"
+									[src]="serverPath + message.senderProfilePicture"
+									[alt]="message.senderName"
+									height="25"
+									width="25"
+									class="rounded rounded-circle"
+								/>
+								<span class="p-2 shadow-sm border rounded message-box">
+									{{ message.message }}
+								</span>
+							</div>
+							<small class="fst-italic" [ngClass]="{ 'text-end': message.receiverId === user.userId }">{{ message.timestamp | date : "short" }}</small>
+						</div>
+					</div>
+					} }
+				</div>
+			</div>
+			<div class="row textbox-row d-flex align-items-center">
+				<div class="col-10">
+					<textarea rows="5" class="w-100" pInputTextarea [(ngModel)]="message" placeholder="Type message here..." [autoResize]="false"></textarea>
+				</div>
+				<div class="col-2">
+					<p-button label="Send" type="button" styleClass="w-100 h-100" (onClick)="sendMessage()" [disabled]="!message" icon="pi pi-send"></p-button>
+				</div>
+			</div>
+			} @else {
+			<div class="row h-100">
+				<div class="col h-100 text-center position-relative">
+					<span class="position-absolute top-50 start-50 translate-middle">Select a user to see messages</span>
+				</div>
+			</div>
+			}
+		</div>
+	</div>
+</div>

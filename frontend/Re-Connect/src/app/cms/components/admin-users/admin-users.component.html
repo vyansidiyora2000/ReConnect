@@ -1,0 +1,41 @@
+<p-table [value]="users" paginator="true" dataKey="user.id" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]" [loading]="loadingUsers">
+	<ng-template pTemplate="caption">
+		<div class="d-flex justify-content-between">
+			<h2 class="m-0">Users</h2>
+			<div class="d-flex gap-3">
+				<p-dropdown [options]="dropdownRoles" (onChange)="onRoleChange($event.value)" [(ngModel)]="selectedRole"></p-dropdown>
+				<button pButton class="p-button-primary">Add Admin</button>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>User ID</th>
+			<th>User Name</th>
+			<th>Type ID</th>
+			<th>Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td>{{ user.userId }}</td>
+			<td>{{ user.userName }}</td>
+			<td>{{ selectedRole }}</td>
+			<td>
+				<button pButton class="p-button-danger" (click)="showDeleteUserConfirmation(user)">Delete</button>
+			</td>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="loadingbody">
+		<tr colspan="4">
+			<td>Loading users...</td>
+		</tr>
+	</ng-template>
+</p-table>
+<p-dialog header="Confirm Delete" [(visible)]="displayDeleteDialog" [modal]="true" [style]="{ width: '300px' }">
+	<p>Are you sure you want to delete the user "{{ userToDelete?.userName }}"?</p>
+	<ng-template pTemplate="footer">
+		<button type="button" class="btn btn-secondary" (click)="hideDeleteDialog()">Cancel</button>
+		<button type="button" class="btn btn-danger" (click)="onDeleteUser()">Delete</button>
+	</ng-template>
+</p-dialog>

@@ -1,0 +1,102 @@
+<p-tabView [activeIndex]="initialTabIndex">
+	@if(user.role == 1) {
+	<p-tabPanel>
+		<ng-template pTemplate="header">
+			<span>Accepted</span>
+			<p-badge [value]="listOfAccepted.length" styleClass="ms-2" severity="success"></p-badge>
+		</ng-template>
+		<p-dataView [value]="listOfAccepted">
+			<ng-template pTemplate="empty">
+				@if(fetchingAcceptedRequests) {
+				<div class="row">
+					@for(number of [1,2,3,4,5,6]; track $index) {
+					<div class="col-2">
+						<div class="p-2 shadow-sm border rounded d-flex flex-column align-items-center">
+							<p-skeleton size="7rem"></p-skeleton>
+							<p-skeleton width="6rem" styleClass="my-2"></p-skeleton>
+						</div>
+					</div>
+					}
+				</div>
+				} @else {
+				<p>No requests found</p>
+				}
+			</ng-template>
+			<ng-template pTemplate="list" let-requests>
+				<div class="row text-center">
+					@for(request of requests; track request.requestId) {
+					<div class="col-2">
+						<div class="p-2 shadow-sm border rounded">
+							<div style="height: 100px">
+								<img class="mh-100 rounded" [src]="imagePath + request.profile" />
+							</div>
+							<p class="fs-5 fw-bold text-decoration-underline text-truncate my-2" role="button" (click)="show(request.userId)">{{ request.name }}</p>
+							<div class="d-flex justify-content-center gap-2">
+								<p-button *ngIf="user.role !== 1" severity="success" label="Accept" icon="pi pi-check" size="small"></p-button>
+								<p-button *ngIf="user.role !== 1" severity="danger" label="Decline" icon="pi pi-times" size="small"></p-button>
+							</div>
+						</div>
+					</div>
+					}
+				</div>
+			</ng-template>
+		</p-dataView>
+	</p-tabPanel>
+	}
+	<p-tabPanel>
+		<ng-template pTemplate="header">
+			<span>Pending</span>
+			<p-badge [value]="listOfPending.length" styleClass="ms-2" severity="warning"></p-badge>
+		</ng-template>
+		<p-dataView [value]="listOfPending">
+			<ng-template pTemplate="empty">
+				@if(fetchingPendingRequests) {
+				<div class="row">
+					@for(number of [1,2,3,4,5,6]; track $index) {
+					<div class="col-2">
+						<div class="p-2 shadow-sm border rounded d-flex flex-column align-items-center">
+							<p-skeleton size="7rem"></p-skeleton>
+							<p-skeleton width="6rem" styleClass="my-2"></p-skeleton>
+						</div>
+					</div>
+					}
+				</div>
+				} @else {
+				<p>No requests found</p>
+				}
+			</ng-template>
+			<ng-template pTemplate="list" let-requests>
+				<div class="row text-center">
+					@for(request of requests; track request.requestId) {
+					<div class="col-2">
+						<div class="p-2 shadow-sm border rounded">
+							<div style="height: 100px">
+								<img class="mh-100 rounded" [src]="imagePath + request.profile" />
+							</div>
+							<p class="fs-5 fw-bold text-decoration-underline text-truncate my-2" role="button" (click)="show(request.userId)">{{ request.name }}</p>
+							<div class="d-flex justify-content-center gap-2">
+								<p-button
+									*ngIf="user.role !== 1"
+									severity="success"
+									label="Accept"
+									icon="pi pi-check"
+									size="small"
+									(onClick)="updateRequest(request.userId, true); $event.stopPropagation()"
+								></p-button>
+								<p-button
+									*ngIf="user.role !== 1"
+									severity="danger"
+									label="Decline"
+									icon="pi pi-times"
+									size="small"
+									(onClick)="updateRequest(request.userId, false); $event.stopPropagation()"
+								></p-button>
+							</div>
+						</div>
+					</div>
+					}
+				</div>
+			</ng-template>
+		</p-dataView>
+	</p-tabPanel>
+</p-tabView>

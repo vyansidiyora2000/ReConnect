@@ -1,0 +1,57 @@
+<div class="companies">
+	<h2>Companies</h2>
+	<p-table
+		[value]="listOfCompanies"
+		dataKey="companyId"
+		[globalFilterFields]="['companyName']"
+		[paginator]="true"
+		[rows]="10"
+		[rowsPerPageOptions]="[5, 10, 20]"
+		[showCurrentPageReport]="true"
+	>
+		<ng-template pTemplate="caption">
+			<div class="flex justify-space-between">
+				<button pButton (click)="showAddCompanyDialog()">Add Company</button>
+				<p-iconField iconPosition="left" class="ml-auto">
+					<p-inputIcon>
+						<i class="pi pi-search"></i>
+					</p-inputIcon>
+					<input pInputText type="text" (input)="filterCompanies($event)" placeholder="Search Company" />
+				</p-iconField>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th>Company ID</th>
+				<th>Company Name</th>
+				<th>Actions</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-company>
+			<tr>
+				<td>{{ company.companyId }}</td>
+				<td>{{ company.companyName }}</td>
+				<td>
+					<button pButton severity="info" class="me-1" (click)="showEditCompanyDialog(company)">Edit</button>
+					<button pButton severity="danger" class="ms-1" (click)="onDeleteCompany(company.companyId)">Delete</button>
+				</td>
+			</tr>
+		</ng-template>
+	</p-table>
+</div>
+
+<div class="add-edit-dialog">
+	<p-dialog header="{{ selectedCompany ? 'Edit Company' : 'Add Company' }}" [(visible)]="showDialog" modal="true" [closable]="false">
+		<form [formGroup]="selectedCompany ? editCompanyForm : addCompanyForm" (ngSubmit)="selectedCompany ? onEditCompanySubmit() : onAddCompanySubmit()">
+			<input *ngIf="selectedCompany" type="hidden" formControlName="companyId" />
+			<div class="form-group">
+				<label for="companyName">Company Name</label>
+				<input type="text" id="companyName" formControlName="companyName" class="form-control" />
+			</div>
+			<div class="form-group">
+				<button type="submit" pButton>{{ selectedCompany ? "Save Changes" : "Add Company" }}</button>
+				<button type="button" pButton [outlined]="true" (click)="selectedCompany ? hideEditDialog() : hideAddDialog()">Cancel</button>
+			</div>
+		</form>
+	</p-dialog>
+</div>

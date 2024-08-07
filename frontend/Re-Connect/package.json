@@ -1,0 +1,70 @@
+{
+	"name": "re-connect",
+	"version": "0.0.0",
+	"author": {
+		"name": "ASDC - Group 4"
+	},
+	"contributors": [
+		{
+			"name": "Sigapriya Kanan",
+			"email": "sg665805@dal.ca"
+		},
+		{
+			"name": "Manish Shankar Jadhav",
+			"email": "mn649712@dal.ca"
+		},
+		{
+			"name": "Mansi Alpeshbhai Kalathiya",
+			"email": "mn410013@dal.ca"
+		},
+		{
+			"name": "Vineeth Gudipalli",
+			"email": "vn388445@dal.ca"
+		}
+	],
+	"maintainers": [
+		{
+			"name": "Sigma Jahan",
+			"email": "sigma.jahan@dal.ca"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "git@git.cs.dal.ca:courses/2024-summer/csci-5308/group04.git"
+	},
+	"scripts": {
+		"ng": "ng",
+		"start": "ng serve",
+		"build:development": "ng build  --extract-licenses=false --verbose=true --configuration=development --base-href=",
+		"build:staging": "ng build  --extract-licenses=false --verbose=true --configuration=staging",
+		"build:production": "ng build  --extract-licenses=false --verbose=true --configuration=production",
+		"watch": "ng build --watch --configuration development"
+	},
+	"private": true,
+	"dependencies": {
+		"@angular/animations": "^17.3.0",
+		"@angular/common": "^17.3.0",
+		"@angular/compiler": "^17.3.0",
+		"@angular/core": "^17.3.0",
+		"@angular/forms": "^17.3.0",
+		"@angular/platform-browser": "^17.3.0",
+		"@angular/platform-browser-dynamic": "^17.3.0",
+		"@angular/router": "^17.3.0",
+		"bootstrap": "^5.3.3",
+		"chart.js": "^4.4.3",
+		"date-fns": "^3.6.0",
+		"primeflex": "^3.3.1",
+		"primeicons": "^7.0.0",
+		"primeng": "^17.17.0",
+		"rxjs": "~7.8.0",
+		"socket.io-client": "^4.7.5",
+		"tslib": "^2.3.0",
+		"zone.js": "~0.14.3"
+	},
+	"devDependencies": {
+		"@angular-devkit/build-angular": "^17.3.7",
+		"@angular/cli": "^17.3.7",
+		"@angular/compiler-cli": "^17.3.0",
+		"typescript": "~5.4.2"
+	}
+}

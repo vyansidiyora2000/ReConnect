@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Add UserDetailID column to Users table -->
+    <changeSet id="15" author="sigapriya">
+        <addColumn tableName="Users">
+            <column name="UserDetailID" type="INT"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- Populate UserDetailID column based on existing relationships -->
+    <changeSet id="15.1" author="sigapriya">
+        <sql>
+            UPDATE Users
+            SET UserDetailID = (SELECT DetailID FROM UserDetails WHERE UserDetails.UserID = Users.UserID);
+        </sql>
+    </changeSet>
+
+    <!-- Drop Foreign Key Constraint for UserID in UserDetails table -->
+    <changeSet id="15.2" author="sigapriya">
+        <dropForeignKeyConstraint baseTableName="UserDetails" constraintName="fk_userdetails_users"/>
+    </changeSet>
+
+    <!-- Drop UserID column from UserDetails table -->
+    <changeSet id="15.3" author="sigapriya">
+        <dropColumn tableName="UserDetails" columnName="UserID"/>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraints -->
+    <changeSet id="15.4" author="sigapriya">
+        <!-- Foreign Key for Users table -->
+        <addForeignKeyConstraint baseTableName="Users" baseColumnNames="UserDetailID"
+                                 constraintName="fk_users_userdetailid" referencedTableName="UserDetails" referencedColumnNames="DetailID"/>
+    </changeSet>
+
+</databaseChangeLog>

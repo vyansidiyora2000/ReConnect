@@ -1,0 +1,11 @@
+<p-menu [model]="items" styleClass="w-100 text-dark shadow h-100 d-flex flex-column justify-content-between p-0">
+	<ng-template pTemplate="item" let-item>
+		<a pRipple class="flex align-items-center p-menuitem-link py-3" [routerLink]="item.route" [routerLinkActive]="'active'">
+			<span [class]="item.icon + ' fs-5'"></span>
+			<span class="ml-3">{{ item.label }}</span>
+		</a>
+	</ng-template>
+	<ng-template pTemplate="end">
+		<p-button icon="pi pi-power-off" styleClass="w-100" severity="danger" label="Logout" [routerLink]="['/', 'logout']"></p-button>
+	</ng-template>
+</p-menu>

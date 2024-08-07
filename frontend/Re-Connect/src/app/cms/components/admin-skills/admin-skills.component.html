@@ -1,0 +1,83 @@
+<p-table #dt [value]="listOfSkills" [paginator]="true" [rows]="10" dataKey="skillId" [globalFilterFields]="['skillName', 'domainName']">
+	<ng-template pTemplate="caption">
+		<div class="flex justify-space-between">
+			<button pButton (click)="showAddDialog()">Add Skill</button>
+			<p-iconField iconPosition="left" class="ml-auto">
+				<p-inputIcon>
+					<i class="pi pi-search"></i>
+				</p-inputIcon>
+				<input pInputText type="text" (input)="filterSkills($event)" placeholder="Search Skill Name/Domain" />
+			</p-iconField>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>Skill ID</th>
+			<th>Skill Name</th>
+			<th>Skill Domain</th>
+			<th>Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-skill>
+		<tr>
+			<td>{{ skill.skillId }}</td>
+			<td>{{ skill.skillName }}</td>
+			<td>{{ skill.domainName }}</td>
+			<td>
+				<button class="mx-1" pButton (click)="showEditDialog(skill)">Edit</button>
+				<button class="mx-1" pButton severity="danger" (click)="onDelete(skill.skillId)">Delete</button>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+
+<p-dialog header="Add Skill" [(visible)]="displayAddDialog" [modal]="true" [closable]="false" [responsive]="true">
+	<form [formGroup]="addSkillForm" (ngSubmit)="onAddSkillSubmit()">
+		<div class="form-group mb-3">
+			<label for="addSkillName">Skill Name</label>
+			<input id="addSkillName" formControlName="skillName" class="form-control" />
+		</div>
+		<div class="form-group mb-3">
+			<label for="addDomainId">Skill Domain</label>
+			<p-dropdown
+				[options]="listOfSkillDomains"
+				optionLabel="domainName"
+				optionValue="domainId"
+				id="addDomainId"
+				formControlName="domainId"
+				styleClass="w-100"
+				[filter]="true"
+			>
+			</p-dropdown>
+		</div>
+		<div class="dialog-footer">
+			<button pButton type="submit">Add Skill</button>
+			<button pButton [outlined]="true" type="button" (click)="hideAddDialog()">Cancel</button>
+		</div>
+	</form>
+</p-dialog>
+
+<p-dialog header="Edit Skill" [(visible)]="displayEditDialog" [modal]="true" [closable]="false" [responsive]="true">
+	<form [formGroup]="editSkillForm" (ngSubmit)="onEditSkillSubmit()">
+		<div class="form-group">
+			<label for="editSkillName">Skill Name</label>
+			<input id="editSkillName" formControlName="skillName" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label for="editDomainId">Skill Domain</label>
+			<p-dropdown
+				[options]="listOfSkillDomains"
+				optionLabel="domainName"
+				optionValue="domainId"
+				id="editDomainId"
+				formControlName="domainId"
+				styleClass="w-100"
+				[filter]="true"
+			></p-dropdown>
+		</div>
+		<div class="d-flex gap-2">
+			<button pButton type="submit">Save Changes</button>
+			<button pButton [outlined]="true" type="button" (click)="hideEditDialog()">Cancel</button>
+		</div>
+	</form>
+</p-dialog>

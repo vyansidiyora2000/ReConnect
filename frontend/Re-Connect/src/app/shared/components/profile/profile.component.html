@@ -1,0 +1,174 @@
+<div class="container my-4">
+	<div class="row">
+		<div class="d-flex flex-column justify-content-center align-items-center" [ngClass]="[enableEdit ? 'col-md-4' : 'col-md-12']">
+			<div class="profile-picture-container mb-3">
+				@if(isFetchingUserDetails){
+				<p-skeleton styleClass="mb-2" size="7rem" />
+				} @else {
+				<img [src]="serverPath + userDetails.profilePicture" alt="Profile Picture" class="profile-picture img-fluid rounded" />
+				}
+			</div>
+			@if(isFetchingUserDetails){
+			<p-skeleton styleClass="mb-2" width="10rem" />
+			} @else {
+			<h2>
+				{{ userDetails.userName }}
+			</h2>
+			}
+			<table class="user-details-table">
+				<tr>
+					<td class="label"><strong>Experience</strong></td>
+					<td>
+						@if(isFetchingUserDetails){
+						<p-skeleton width="6rem" />
+						} @else {
+						{{ userDetails.experience }} years }
+					</td>
+				</tr>
+				<tr>
+					<td class="label"><strong>Current Company</strong></td>
+					<td>
+						@if(isFetchingUserDetails){
+						<p-skeleton width="6rem" />
+						} @else {
+						{{ userDetails.companyName }}
+						}
+					</td>
+				</tr>
+
+				<tr>
+					<td class="label"><strong>City</strong></td>
+					<td>
+						@if(isFetchingUserDetails){
+						<p-skeleton width="6rem" />
+						} @else {
+						{{ userDetails.cityName }}
+						}
+					</td>
+				</tr>
+				<tr>
+					<td class="label"><strong>Country</strong></td>
+					<td>
+						@if(isFetchingUserDetails){
+						<p-skeleton width="6rem" />
+						} @else {
+						{{ userDetails.countryName }}
+						}
+					</td>
+				</tr>
+				<tr>
+					<td class="label"><strong>Skills</strong></td>
+					<td>
+						@if(isFetchingUserDetails){ @for (item of [1,2,3,4,5]; track $index) {
+						<p-skeleton width="3rem" borderRadius="16px" />
+						} } @else {
+						<ng-container *ngIf="userDetails.skills && userDetails.skills.length; else noSkills">
+							<p-chip *ngFor="let skill of userDetails.skills" [label]="skill.skillName"></p-chip>
+						</ng-container>
+						<ng-template #noSkills>
+							<span>N/A</span>
+						</ng-template>
+						}
+					</td>
+				</tr>
+			</table>
+			<div class="d-flex align-items-center gap-3 my-3">
+				<p-button *ngIf="enableEdit" severity="primary" type="button" (click)="showEditForm = true">Edit Profile </p-button>
+				<p-button type="button" severity="info" (click)="getResume()">Download Resume</p-button>
+			</div>
+		</div>
+
+		<!-- Edit Form Section -->
+		<div class="col-md-8" *ngIf="enableEdit">
+			<div *ngIf="showEditForm" class="edit-form scrollable-container container-fluid">
+				<form [formGroup]="profileForm" (ngSubmit)="updateUserDetails()">
+					<div class="row mb-3">
+						<div class="col-12">
+							<label for="userName" class="form-label">Username</label>
+							<input type="text" id="userName" pInputText formControlName="userName" class="w-100" readonly />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-6">
+							<label for="experience" class="form-label">Experience</label>
+							<p-dropdown
+								id="experience"
+								formControlName="experience"
+								[options]="listOfExperiences"
+								optionLabel="experienceName"
+								placeholder="Select Experience"
+								styleClass="w-100"
+							></p-dropdown>
+						</div>
+						<div class="col-6">
+							<label for="company" class="form-label">Company</label>
+							<p-dropdown
+								id="company"
+								formControlName="company"
+								[options]="listOfCompanies"
+								optionLabel="companyName"
+								placeholder="Select Company"
+								styleClass="w-100"
+							></p-dropdown>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-6">
+							<label for="country" class="form-label">Country</label>
+							<p-dropdown
+								id="country"
+								formControlName="country"
+								[options]="listOfCountries"
+								optionLabel="countryName"
+								placeholder="Select Country"
+								styleClass="w-100"
+							></p-dropdown>
+						</div>
+						<div class="col-6">
+							<label for="city" class="form-label">City</label>
+							<p-dropdown
+								id="city"
+								formControlName="city"
+								[options]="listOfCities"
+								optionLabel="cityName"
+								placeholder="Select City"
+								styleClass="w-100"
+							></p-dropdown>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<label for="skills" class="form-label">Skills</label>
+						<p-multiSelect
+							id="skills"
+							formControlName="skills"
+							[options]="listOfSkills"
+							display="chip"
+							[showClear]="true"
+							styleClass="w-100"
+							[maxlength]="5"
+							[maxSelectedLabels]="5"
+							optionLabel="skillName"
+							optionValue="skillId"
+						></p-multiSelect>
+						<div *ngIf="profileForm.controls['skills'].dirty && profileForm.controls['skills'].hasError('required')">
+							<small class="invalid-form-control">Skills are required</small>
+						</div>
+						<div *ngIf="profileForm.controls['skills'].dirty && profileForm.controls['skills'].hasError('maxlength')">
+							<small class="invalid-form-control">Cannot select more than 5 skills</small>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="profilePicture" class="form-label">Profile Picture</label>
+						<p-fileUpload mode="basic" id="profilePicture" name="profilePicture" accept="image/*" (onSelect)="onProfilePictureSelect($event)"></p-fileUpload>
+					</div>
+					<div class="mb-3">
+						<label for="resume" class="form-label">Resume</label>
+						<p-fileUpload mode="basic" id="resume" name="resume" accept=".pdf" (onSelect)="onResumeSelect($event)"></p-fileUpload>
+					</div>
+					<p-button type="submit" severity="primary" class="me-2">Save</p-button>
+					<p-button type="button" severity="danger" class="me-2" (click)="showEditForm = false">Cancel</p-button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

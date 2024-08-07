@@ -1,0 +1,84 @@
+@if(!selectedCountry) {
+<div class="d-flex h-100 justify-content-betwee align-items-center">Please select a country</div>
+}
+
+<div class="cities">
+	<h2>Cities for {{ selectedCountry.countryName }}</h2>
+	<p-table
+		[value]="cities"
+		dataKey="cityId"
+		[globalFilterFields]="['cityName']"
+		[paginator]="true"
+		[rows]="10"
+		[rowsPerPageOptions]="[5, 10, 20]"
+		[showCurrentPageReport]="true"
+	>
+		<ng-template pTemplate="caption">
+			<div class="flex justify-space-between">
+				<button pButton (click)="showAddCityDialog()">Add City</button>
+				<p-iconField iconPosition="left" class="ml-auto">
+					<p-inputIcon>
+						<i class="pi pi-search"></i>
+					</p-inputIcon>
+					<input pInputText type="text" (input)="filterCities($event)" placeholder="Search City" />
+				</p-iconField>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th>City ID</th>
+				<th>City Name</th>
+				<th>Actions</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-city>
+			<tr>
+				<td>{{ city.cityId }}</td>
+				<td>{{ city.cityName }}</td>
+				<td>
+					<button class="mx-1" pButton severity="info" size="small" (click)="showEditCityDialog(city)">Edit</button>
+					<button class="mx-1" pButton severity="danger" size="small" (click)="onDeleteCity(city.cityId)">Delete</button>
+				</td>
+			</tr>
+		</ng-template>
+	</p-table>
+
+	<p-dialog header="Add City" [(visible)]="displayAddDialog" modal="true" [closable]="false">
+		<form [formGroup]="addCityForm" (ngSubmit)="onAddCitySubmit()">
+			<div class="form-group">
+				<label for="addCityName">City Name</label>
+				<input type="text" id="addCityName" formControlName="cityName" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="addCountry">Country</label>
+				<select id="addCountry" formControlName="countryId" class="form-control">
+					<option *ngFor="let country of countries" [value]="country.countryId">{{ country.countryName }}</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<button type="submit" pButton>Add City</button>
+				<button type="button" pButton severity="secondary" (click)="hideAddDialog()">Cancel</button>
+			</div>
+		</form>
+	</p-dialog>
+
+	<p-dialog header="Edit City" [(visible)]="displayEditDialog" modal="true" [closable]="false">
+		<form [formGroup]="editCityForm" (ngSubmit)="onEditCitySubmit()">
+			<input type="hidden" formControlName="cityId" />
+			<div class="form-group">
+				<label for="editCityName">City Name</label>
+				<input type="text" id="editCityName" formControlName="cityName" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="editCountry">Country</label>
+				<select id="editCountry" formControlName="countryId" class="form-control">
+					<option *ngFor="let country of countries" [value]="country.countryId">{{ country.countryName }}</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<button type="submit" pButton>Save Changes</button>
+				<button type="button" pButton severity="secondary" (click)="hideEditDialog()">Cancel</button>
+			</div>
+		</form>
+	</p-dialog>
+</div>

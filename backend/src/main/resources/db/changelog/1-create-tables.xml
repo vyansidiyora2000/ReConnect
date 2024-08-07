@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- User Types Table -->
+    <changeSet id="1" author="sigapriya">
+        <createTable tableName="UserType">
+            <column name="TypeID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TypeName" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Country Table -->
+    <changeSet id="2" author="sigapriya">
+        <createTable tableName="Country">
+            <column name="CountryID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CountryName" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- City Table -->
+    <changeSet id="3" author="sigapriya">
+        <createTable tableName="City">
+            <column name="CityID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CityName" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CountryID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraint for City Table -->
+    <changeSet id="3.1" author="sigapriya">
+        <addForeignKeyConstraint baseTableName="City" baseColumnNames="CountryID"
+                                 constraintName="fk_city_country" referencedTableName="Country" referencedColumnNames="CountryID"/>
+    </changeSet>
+
+    <!-- Company Table -->
+    <changeSet id="4" author="sigapriya">
+        <createTable tableName="Company">
+            <column name="CompanyID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="CompanyName" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Users Table -->
+    <changeSet id="5" author="sigapriya">
+        <createTable tableName="Users">
+            <column name="UserID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="UserEmail" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="Password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TypeID" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraint for Users Table -->
+    <changeSet id="5.1" author="sigapriya">
+        <addForeignKeyConstraint baseTableName="Users" baseColumnNames="TypeID"
+                                 constraintName="fk_users_typeid" referencedTableName="UserType" referencedColumnNames="TypeID"/>
+    </changeSet>
+
+    <!-- User Details Table -->
+    <changeSet id="6" author="sigapriya">
+        <createTable tableName="UserDetails">
+            <column name="DetailID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="UserID" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UserName" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CurrentCompany" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="Experience" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="Resume" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ProfilePicture" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="CityID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="CountryID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraints for User Details Table -->
+    <changeSet id="6.1" author="sigapriya">
+        <addForeignKeyConstraint baseTableName="UserDetails" baseColumnNames="UserID"
+                                 constraintName="fk_userdetails_users" referencedTableName="Users" referencedColumnNames="UserID"/>
+        <addForeignKeyConstraint baseTableName="UserDetails" baseColumnNames="CurrentCompany"
+                                 constraintName="fk_userdetails_company" referencedTableName="Company" referencedColumnNames="CompanyID"/>
+        <addForeignKeyConstraint baseTableName="UserDetails" baseColumnNames="CityID"
+                                 constraintName="fk_userdetails_city" referencedTableName="City" referencedColumnNames="CityID"/>
+        <addForeignKeyConstraint baseTableName="UserDetails" baseColumnNames="CountryID"
+                                 constraintName="fk_userdetails_country" referencedTableName="Country" referencedColumnNames="CountryID"/>
+    </changeSet>
+
+    <!-- Skills Table -->
+    <changeSet id="7" author="sigapriya">
+        <createTable tableName="Skills">
+            <column name="SkillID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="SkillName" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SkillDomain" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- User Skills Table -->
+    <changeSet id="8" author="sigapriya">
+        <createTable tableName="UserSkills">
+            <column name="UserSkillID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="UserID" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SkillID" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraints for User Skills Table -->
+    <changeSet id="8.1" author="sigapriya">
+        <addForeignKeyConstraint baseTableName="UserSkills" baseColumnNames="UserID"
+                                 constraintName="fk_userskills_users" referencedTableName="Users" referencedColumnNames="UserID"/>
+        <addForeignKeyConstraint baseTableName="UserSkills" baseColumnNames="SkillID"
+                                 constraintName="fk_userskills_skills" referencedTableName="Skills" referencedColumnNames="SkillID"/>
+    </changeSet>
+
+    <!-- Messages Table -->
+    <changeSet id="9" author="sigapriya">
+        <createTable tableName="Messages">
+            <column name="MessageID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="MessageContent" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SenderID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ReceiverID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="Time" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="IsRead" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraints for Messages Table -->
+    <changeSet id="9.1" author="sigapriya">
+        <addForeignKeyConstraint baseTableName="Messages" baseColumnNames="SenderID"
+                                 constraintName="fk_messages_sender" referencedTableName="Users" referencedColumnNames="UserID"/>
+        <addForeignKeyConstraint baseTableName="Messages" baseColumnNames="ReceiverID"
+                                 constraintName="fk_messages_receiver" referencedTableName="Users" referencedColumnNames="UserID"/>
+    </changeSet>
+
+    <!-- Notifications Table -->
+    <changeSet id="10" author="sigapriya">
+        <createTable tableName="Notifications">
+            <column name="NotificationID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="UserID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="NotificationType" type="VARCHAR(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="NotificationContent" type="TEXT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="IsRead" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CreatedAt" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UpdatedAt" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraints for Notifications Table -->
+    <changeSet id="10.1" author="sigapriya">
+        <addForeignKeyConstraint baseTableName="Notifications" baseColumnNames="UserID"
+                                 constraintName="fk_notifications_users" referencedTableName="Users" referencedColumnNames="UserID"/>
+    </changeSet>
+
+    <!-- Referral Requests Table -->
+    <changeSet id="11" author="sigapriya">
+        <createTable tableName="ReferralRequests">
+            <column name="RequestID" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="ReferentID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="ReferrerID" type="INT">
+                <constraints nullable="true"/>
+            </column>
+            <column name="Status" type="VARCHAR(50)" defaultValue="Pending">
+                <constraints nullable="false"/>
+            </column>
+            <column name="RequestDate" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ResponseDate" type="TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraints for Referral Requests Table -->
+    <changeSet id="11.1" author="sigapriya">
+        <addForeignKeyConstraint baseTableName="ReferralRequests" baseColumnNames="ReferentID"
+                                 constraintName="fk_referralrequests_referent" referencedTableName="Users" referencedColumnNames="UserID"/>
+        <addForeignKeyConstraint baseTableName="ReferralRequests" baseColumnNames="ReferrerID"
+                                 constraintName="fk_referralrequests_referrer" referencedTableName="Users" referencedColumnNames="UserID"/>
+    </changeSet>
+
+</databaseChangeLog>
+

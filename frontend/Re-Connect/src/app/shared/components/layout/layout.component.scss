@@ -1,0 +1,12 @@
+.box {
+	display: flex;
+	flex-direction: column;
+}
+
+.row.header {
+	flex: 0 1 auto;
+}
+
+.row.content {
+	flex: 1 1 auto;
+}

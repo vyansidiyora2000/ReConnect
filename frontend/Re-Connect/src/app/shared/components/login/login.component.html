@@ -1,0 +1,52 @@
+<div class="container-fluid h-100 login-container">
+	<div class="row h-100 d-flex align-items-center">
+		<div class="col-md-6 col-xxl-4 offset-md-3 offset-xxl-4">
+			<p-card styleClass="position-relative shadow-lg border-dark border rounded">
+				<ng-template pTemplate="title">
+					<h1 class="fw-bold">Login</h1>
+				</ng-template>
+				<!-- <div class="row mb-2">
+					<div class="col pl-4">
+						@for(role of roles; track role.roleId) {
+						<p-radioButton name="role" [id]="role.role" [value]="role.roleId" [(ngModel)]="selectedRole"></p-radioButton>
+						<label for="{{ role.role }}" class="ml-1 mr-3">{{ role.role }}</label>
+						}
+					</div>
+				</div> -->
+
+				<form [formGroup]="userCredentialsForm">
+					<div class="row">
+						<div class="col-12">
+							<label for="email" class="required">Email</label>
+							<input id="email" formControlName="email" type="email" pInputText [required]="true" class="w-100" [autofocus]="true" />
+							@if(userCredentialsForm.controls['email'].dirty && userCredentialsForm.controls['email'].hasError('required')) {
+							<small class="invalid-form-control">Email is required</small>
+							} @if(userCredentialsForm.controls['email'].dirty && userCredentialsForm.controls['email'].hasError('email')) {
+							<small class="invalid-form-control">Enter a valid email</small>
+							}
+						</div>
+						<div class="col-12">
+							<label for="password" class="required">Password</label>
+							<p-password
+								id="password"
+								[toggleMask]="true"
+								[feedback]="false"
+								styleClass="w-100"
+								inputStyleClass="w-100"
+								formControlName="password"
+							></p-password>
+							@if(userCredentialsForm.controls['password'].dirty && userCredentialsForm.controls['password'].hasError('required')) {
+							<small class="invalid-form-control">Password is required</small>
+							}
+						</div>
+					</div>
+					<div class="d-flex flex-column align-items-center pt-4 justify-content-center">
+						<p-button type="submit" severity="primary" (click)="onSubmit()" [loading]="loading">Login</p-button>
+						<p class="mt-2">Don't have an account? <a href="javascript:void(0)" [routerLink]="['/sign-up']">Sign Up</a></p>
+						<p class="mt-2">Forgot password? <a href="javascript:void(0)" [routerLink]="['/forgot-password']">Reset Password</a></p>
+					</div>
+				</form>
+			</p-card>
+		</div>
+	</div>
+</div>

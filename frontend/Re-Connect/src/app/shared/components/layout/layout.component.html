@@ -1,0 +1,24 @@
+@if(overlayService.getOverlay | async) {
+<div
+	class="overlay position-fixed top-0 start-0 vh-100 vw-100 bg-dark text-light d-flex justify-content-center align-items-center"
+	style="--bs-bg-opacity: 0.35; z-index: 100000"
+>
+	<i class="pi pi-spin pi-spinner me-2" style="font-size: 2rem"></i>
+	<span class="overlay-message fs-4">{{ overlayService.overlayMessage }}...</span>
+</div>
+}
+<div class="container-fluid h-100 box">
+	<div class="row header">
+		<div class="col p-0">
+			<rc-header></rc-header>
+		</div>
+	</div>
+	<div class="row content h-100 overflow-hidden">
+		<div class="col-1 p-0 sidebar">
+			<rc-sidebar></rc-sidebar>
+		</div>
+		<div class="col-11 h-100 overflow-auto">
+			<router-outlet></router-outlet>
+		</div>
+	</div>
+</div>

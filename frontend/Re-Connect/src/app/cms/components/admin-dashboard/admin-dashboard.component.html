@@ -1,0 +1,23 @@
+<div class="row">
+	<div class="col">
+		<div class="card flex justify-content-center p-4">
+			<h1>Users by Country</h1>
+			<p-chart type="bar" [data]="listOfUsersPerCountry" [options]="barOptions" />
+		</div>
+	</div>
+</div>
+<hr />
+<div class="row">
+	<div class="col-6">
+		<div class="card flex justify-content-center p-4">
+			<h1>Users By Type</h1>
+			<p-chart type="pie" [data]="listOfUsersPerType" [options]="pieOptions" />
+		</div>
+	</div>
+	<div class="col-6">
+		<div class="card flex justify-content-center p-4">
+			<h1>Top 5 Companies</h1>
+			<p-chart type="polarArea" [data]="listOfUsersPerCompany" />
+		</div>
+	</div>
+</div>

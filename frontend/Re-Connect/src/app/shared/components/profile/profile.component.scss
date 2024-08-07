@@ -1,0 +1,74 @@
+
+.profile-header {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.edit-form {
+  overflow: auto;
+}
+
+.scrollable-horizontal {
+  overflow-x: auto;
+}
+
+.scrollable-vertical {
+  overflow-y: auto;
+}
+
+.scrollable-container {
+  max-height: 600px;
+  max-width: 100%;
+}
+
+.user-details-table {
+  width: 100%;
+  border-collapse: separate; /* Use separate borders for better styling */
+  border-spacing: 0; /* Remove spacing between cells */
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+  border: 1px solid #ddd; /* Add border around the table */
+  border-radius: 10px; /* Round the corners of the table */
+  overflow: hidden; /* Hide overflow to ensure rounded corners */
+}
+
+.user-details-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd; /* Add bottom border to each cell */
+  vertical-align: top;
+}
+
+.user-details-table tr:last-child td {
+  border-bottom: none; /* Remove bottom border from the last row */
+}
+
+.user-details-table td.label {
+  font-weight: bold;
+  background-color: #f4f4f4;
+  width: 200px;
+  border-right: 1px solid #ddd; /* Add right border to label cells */
+}
+
+.user-details-table td:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

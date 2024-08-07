@@ -1,0 +1,73 @@
+<div class="container">
+	<div class="countries">
+		<h2>Countries</h2>
+		<p-table
+			[value]="countries"
+			dataKey="countryId"
+			[globalFilterFields]="['countryName']"
+			[paginator]="true"
+			[rows]="10"
+			[rowsPerPageOptions]="[5, 10, 20]"
+			[showCurrentPageReport]="true"
+		>
+			<ng-template pTemplate="caption">
+				<div class="flex justify-space-between">
+					<button pButton (click)="showAddCountryDialog()">Add Country</button>
+					<p-iconField iconPosition="left" class="ml-auto">
+						<p-inputIcon>
+							<i class="pi pi-search"></i>
+						</p-inputIcon>
+						<input pInputText type="text" (input)="filterCountries($event)" placeholder="Search Country" />
+					</p-iconField>
+				</div>
+			</ng-template>
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Country ID</th>
+					<th>Country Name</th>
+					<th>Actions</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-country>
+				<tr>
+					<td role="button">{{ country.countryId }}</td>
+					<td role="button" (click)="onCountrySelect(country)" class="text-decoration-underline">{{ country.countryName }}</td>
+					<td>
+						<button class="mx-1" pButton severity="info" size="small" (click)="showEditCountryDialog(country)">Edit</button>
+						<button class="mx-1" pButton severity="danger" size="small" (click)="onDeleteCountry(country.countryId)">Delete</button>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+
+	<div class="cities">
+		<app-admin-cities *ngIf="selectedCountry" [selectedCountry]="selectedCountry"></app-admin-cities>
+	</div>
+</div>
+<p-dialog header="Add Country" [(visible)]="displayAddDialog" modal="true" [closable]="false">
+	<form [formGroup]="addCountryForm">
+		<div class="form-group">
+			<label for="countryName required">Country Name</label>
+			<input type="text" id="countryName" formControlName="countryName" class="form-control" />
+		</div>
+	</form>
+	<ng-template pTemplate="footer">
+		<button type="button" pButton severity="secondary" (click)="hideAddDialog()">Cancel</button>
+		<button type="submit" pButton (click)="onAddCountrySubmit()">Add Country</button>
+	</ng-template>
+</p-dialog>
+
+<p-dialog header="Edit Country" [(visible)]="displayEditDialog" modal="true" [closable]="false">
+	<form [formGroup]="editCountryForm">
+		<input type="hidden" formControlName="countryId" />
+		<div class="form-group">
+			<label for="editCountryName required">Country Name</label>
+			<input type="text" id="editCountryName" formControlName="countryName" class="form-control" />
+		</div>
+	</form>
+	<ng-template pTemplate="footer">
+		<button type="button" pButton severity="secondary" (click)="hideEditDialog()">Cancel</button>
+		<button type="submit" pButton (click)="onEditCountrySubmit()">Save Changes</button>
+	</ng-template>
+</p-dialog>

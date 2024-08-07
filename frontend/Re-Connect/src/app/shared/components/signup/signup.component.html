@@ -1,0 +1,209 @@
+<div class="container-fluid h-100 login-container overflow-y-auto">
+	<div class="row h-100 d-flex align-items-center">
+		<div class="col-md-6 col-xxl-4 offset-md-3 offset-xxl-4">
+			<p-card styleClass="position-relative shadow">
+				<ng-template pTemplate="title"><h1 class="fw-bold">Sign Up</h1></ng-template>
+				<ng-template pTemplate="subtitle"><h5>Create an account here</h5></ng-template>
+				<img src="/assets/images/logo.png" alt="Logo" class="logo" />
+				<div class="row mb-2">
+					<div class="col pl-4">
+						@for(role of roles; track role.roleId) { @if(role.roleId != 0){
+						<p-radioButton name="role" [id]="role.role" [value]="role.roleId" [(ngModel)]="selectedRole"></p-radioButton>
+						<label for="{{ role.role }}" class="ml-1 mr-3">{{ role.role }}</label>
+						} }
+					</div>
+				</div>
+				<p-stepper [linear]="true" [activeStep]="activeStep" styleClass="mb-0">
+					<p-stepperPanel>
+						<ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
+							<form [formGroup]="userCredentialsForm">
+								<div class="row">
+									<div class="col-12">
+										<label for="name" class="required">Name</label>
+										<input id="name" formControlName="name" type="text" pInputText [required]="true" class="w-100" />
+										@if(userCredentialsForm.controls['name'].dirty && userCredentialsForm.controls['name'].hasError('required')) {
+										<small class="invalid-form-control">Name is required</small>
+										} @if(userCredentialsForm.controls['name'].dirty && userCredentialsForm.controls['name'].hasError('maxlength')) {
+										<small class="invalid-form-control">Name cannot be more than 50 characters</small>
+										} @if(userCredentialsForm.controls['name'].dirty && userCredentialsForm.controls['name'].hasError('name')) {
+										<small class="invalid-form-control">Enter a valid name</small>
+										}
+									</div>
+									<div class="col-12">
+										<label for="email" class="required">Email</label>
+										<input id="email" formControlName="email" type="email" pInputText [required]="true" class="w-100" />
+										@if(userCredentialsForm.controls['email'].dirty && userCredentialsForm.controls['email'].hasError('required')) {
+										<small class="invalid-form-control">Email is required</small>
+										} @if(userCredentialsForm.controls['email'].dirty && userCredentialsForm.controls['email'].hasError('maxlength')) {
+										<small class="invalid-form-control">Email cannot be more than 50 characters</small>
+										} @if(userCredentialsForm.controls['email'].dirty && userCredentialsForm.controls['email'].hasError('email')) {
+										<small class="invalid-form-control">Enter a valid email</small>
+										}
+									</div>
+									<div class="col-12">
+										<label for="password" class="required">Password</label>
+										<p-password id="password" [toggleMask]="true" styleClass="w-100" inputStyleClass="w-100" formControlName="password"></p-password>
+										@if(userCredentialsForm.controls['password'].dirty && userCredentialsForm.controls['password'].hasError('required')) {
+										<small class="invalid-form-control">Password is required</small>
+										} @if(userCredentialsForm.controls['password'].dirty && userCredentialsForm.controls['password'].hasError('minlength')) {
+										<small class="invalid-form-control">Password cannot be less than 5 characters</small>
+										}
+									</div>
+									<div class="col-12">
+										<label for="confirmPassword" class="required">Confirm Password</label>
+										<p-password
+											id="confirmPassword"
+											[toggleMask]="true"
+											styleClass="w-100"
+											inputStyleClass="w-100"
+											formControlName="confirmPassword"
+											[feedback]="false"
+										></p-password>
+										@if(userCredentialsForm.controls['confirmPassword'].dirty && userCredentialsForm.controls['confirmPassword'].hasError('required')) {
+										<small class="invalid-form-control">Confirm Password is required</small>
+										} @if(userCredentialsForm.controls['confirmPassword'].dirty && userCredentialsForm.controls['confirmPassword'].hasError('minlength')) {
+										<small class="invalid-form-control">Confirm Password cannot be less than 5 characters</small>
+										} @if(userCredentialsForm.controls['confirmPassword'].dirty && userCredentialsForm.controls['password'].value !==
+										userCredentialsForm.controls['confirmPassword'].value) {
+										<small class="invalid-form-control">Passwords do not match</small>
+										}
+									</div>
+								</div>
+							</form>
+							<div class="d-flex flex-column align-items-center pt-4 justify-content-center">
+								<p-button
+									[label]="loading ? 'Verifying Email ...' : 'Next'"
+									icon="pi pi-arrow-right"
+									iconPos="right"
+									[loading]="verificationPending"
+									(onClick)="onCheckForm(userCredentialsForm, index)"
+								/>
+								<p class="mt-2 mb-0">Already have an account? <a href="javascript:void(0)" [routerLink]="['/login']">Login</a></p>
+							</div>
+						</ng-template>
+					</p-stepperPanel>
+					<p-stepperPanel>
+						<ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback" let-index="index">
+							<form [formGroup]="userDetailsForm">
+								<div class="row">
+									<div class="col-6">
+										<label for="company" class="required">Company</label>
+										<p-dropdown
+											id="company"
+											formControlName="company"
+											[options]="listOfCompanies"
+											optionLabel="companyName"
+											optionValue="companyId"
+											styleClass="w-100"
+											[filter]="true"
+										></p-dropdown>
+										@if(userDetailsForm.controls['company'].dirty && userDetailsForm.controls['company'].hasError('required')) {
+										<small class="invalid-form-control">Company is required</small>
+										}
+									</div>
+									<div class="col-6">
+										<label for="experience" class="required">Experience</label>
+										<p-dropdown
+											id="experience"
+											formControlName="experience"
+											[options]="listOfExperiences"
+											optionLabel="experienceName"
+											optionValue="experienceId"
+											styleClass="w-100"
+										></p-dropdown>
+										@if(userDetailsForm.controls['experience'].dirty && userDetailsForm.controls['experience'].hasError('required')) {
+										<small class="invalid-form-control">Experience is required</small>
+										}
+									</div>
+									<div class="col-12">
+										<label for="skills" class="required">Skills</label>
+										<p-multiSelect
+											id="skills"
+											formControlName="skills"
+											[options]="listOfSkills"
+											display="chip"
+											[showClear]="true"
+											styleClass="w-100"
+											[maxlength]="5"
+											[maxSelectedLabels]="5"
+											optionLabel="skillName"
+											optionValue="skillId"
+											[filter]="true"
+										></p-multiSelect>
+										@if(userDetailsForm.controls['skills'].dirty && userDetailsForm.controls['skills'].hasError('required')) {
+										<small class="invalid-form-control">Skills are required</small>
+										} @if(userDetailsForm.controls['skills'].dirty && userDetailsForm.controls['skills'].hasError('maxlength')) {
+										<small class="invalid-form-control">Cannot select more than 5 skills</small>
+										}
+									</div>
+									<div class="col-6">
+										<label for="country" class="required">Country</label>
+										<p-dropdown
+											id="country"
+											formControlName="country"
+											[options]="listOfCountries"
+											optionLabel="countryName"
+											optionValue="countryId"
+											styleClass="w-100"
+											[filter]="true"
+										></p-dropdown>
+										@if(userDetailsForm.controls['country'].dirty && userDetailsForm.controls['country'].hasError('required')) {
+										<small class="invalid-form-control">Country is required</small>
+										}
+									</div>
+									<div class="col-6">
+										<label for="city" class="required">City</label>
+										<p-dropdown
+											id="city"
+											formControlName="city"
+											[options]="listOfCities"
+											optionLabel="cityName"
+											optionValue="cityId"
+											styleClass="w-100"
+											[filter]="true"
+										></p-dropdown>
+										@if(userDetailsForm.controls['city'].dirty && userDetailsForm.controls['city'].hasError('required')) {
+										<small class="invalid-form-control">City is required</small>
+										}
+									</div>
+								</div>
+							</form>
+							<div class="d-flex gap-2 pt-4 justify-content-center">
+								<p-button label="Back" severity="secondary" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
+								<p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()" />
+							</div>
+						</ng-template>
+					</p-stepperPanel>
+					<p-stepperPanel>
+						<ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
+							<form [formGroup]="uploadForm" enctype="multipart/form-data">
+								<div class="flex flex-column h-12rem">
+									<div class="col-6">
+										<label for="profile" class="required">Profile Image</label>
+										<input
+											type="file"
+											id="profile"
+											formControlName="profileImage"
+											accept="image/*"
+											maxFileSize="1000000"
+											(change)="onUpload($event)"
+											required
+											class="d-block"
+										/>
+									</div>
+									<div class="col-6">
+										<img [src]="previewImg" alt="Profile Picture" height="100" width="100" />
+									</div>
+								</div>
+								<div class="d-flex gap-2 pt-4 justify-content-center">
+									<p-button label="Back" severity="secondary" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
+									<p-button type="submit" severity="primary" [loading]="isCreatingUser" (onClick)="onSubmit()">Sign Up</p-button>
+								</div>
+							</form>
+						</ng-template>
+					</p-stepperPanel>
+				</p-stepper>
+			</p-card>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Refresh Token Table -->
+    <changeSet id="12" author="Manish">
+        <createTable tableName="RefreshToken">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expiryDate" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UserID" type="int">
+                <constraints primaryKey="true"  nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add Foreign Key Constraints for Refresh Token Table -->
+    <changeSet id="12.1" author="Manish">
+        <addForeignKeyConstraint baseTableName="RefreshToken"
+                                 baseColumnNames="UserID"
+                                 constraintName="fk_refresh_token_user_id"
+                                 referencedTableName="Users"
+                                 referencedColumnNames="UserID"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="13" author="sigapriya">
+        <addColumn tableName="Users">
+            <column name="ResetToken" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
+</databaseChangeLog>
+

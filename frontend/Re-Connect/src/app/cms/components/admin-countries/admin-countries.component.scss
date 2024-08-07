@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+}
+
+.countries, .cities {
+  flex: 1;
+  margin: 10px;
+}
+
+.table {
+  width: 100%;
+}

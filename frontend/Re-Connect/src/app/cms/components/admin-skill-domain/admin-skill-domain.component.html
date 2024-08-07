@@ -1,0 +1,60 @@
+<!-- Table to Display Skill Domains -->
+<p-table
+	#dt
+	[value]="listOfSkillDomains"
+	dataKey="domainId"
+	[globalFilterFields]="['domainName']"
+	[paginator]="true"
+	[rows]="10"
+	[rowsPerPageOptions]="[5, 10, 20]"
+	[showCurrentPageReport]="true"
+>
+	<ng-template pTemplate="caption">
+		<div class="flex justify-space-between">
+			<button pButton (click)="showAddDialog()">Add Skill Domain</button>
+			<p-iconField iconPosition="left" class="ml-auto">
+				<p-inputIcon>
+					<i class="pi pi-search"></i>
+				</p-inputIcon>
+				<input pInputText type="text" (input)="filterDomains($event)" placeholder="Search Domain" />
+			</p-iconField>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>Domain ID</th>
+			<th>Domain Name</th>
+			<th>Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-domain>
+		<tr>
+			<td>{{ domain.domainId }}</td>
+			<td>{{ domain.domainName }}</td>
+			<td>
+				<button class="mx-1" pButton (click)="showEditDialog(domain)">Edit</button>
+				<button class="mx-1" pButton severity="danger" (click)="deleteSkillDomain(domain.domainId)">Delete</button>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+
+<!-- Add/Edit Skill Domain Dialog -->
+<p-dialog
+	header="{{ selectedSkillDomain ? 'Edit Skill Domain' : 'Add Skill Domain' }}"
+	[(visible)]="displayDialog"
+	[modal]="true"
+	[closable]="false"
+	[responsive]="true"
+>
+	<form [formGroup]="skillDomainForm" (ngSubmit)="selectedSkillDomain ? editSkillDomain() : addSkillDomain()">
+		<div class="form-group">
+			<label for="domainName">Domain Name</label>
+			<input id="domainName" formControlName="domainName" class="form-control" />
+		</div>
+		<div class="dialog-footer">
+			<button pButton type="submit">{{ selectedSkillDomain ? "Save Changes" : "Add Skill Domain" }}</button>
+			<button class="btn btn-secondary" type="button" (click)="hideDialog()">Cancel</button>
+		</div>
+	</form>
+</p-dialog>
